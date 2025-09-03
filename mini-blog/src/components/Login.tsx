@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { type User } from "../types";
-import { Link } from "react-router";
 import { Link, useNavigate } from "react-router";
 import { loginApi } from "../hooks/Api";
 
@@ -14,15 +13,8 @@ const Login = ({ onLogin }: LoginProps) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const user: User = {
-      id: Date.now(),
-      name: userName,
-      email: `${userName}@example.com`,
-    };
-    onLogin(user);
     setLoading(true);
     try {
       const { token, user } = await loginApi(userName, password);
