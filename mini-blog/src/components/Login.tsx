@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { type User } from "../types";
 import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { loginApi } from "../hooks/Api";
 
 interface LoginProps {
   onLogin: (user: User) => void;
@@ -9,8 +11,10 @@ interface LoginProps {
 const Login = ({ onLogin }: LoginProps) => {
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const user: User = {
       id: Date.now(),
@@ -18,6 +22,18 @@ const Login = ({ onLogin }: LoginProps) => {
       email: `${userName}@example.com`,
     };
     onLogin(user);
+    setLoading(true);
+    try {
+      const { token, user } = await loginApi(userName, password);
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      onLogin(user);
+      navigate("/");
+    } catch (error) {
+      console.error("Error logging in:", error);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="d-flex align-items-center justify-content-center vh-100 bg-light">
