@@ -12,6 +12,7 @@ const Login = ({ onLogin }: LoginProps) => {
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
