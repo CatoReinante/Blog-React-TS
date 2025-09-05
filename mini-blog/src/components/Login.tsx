@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { type User } from "../types";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { loginUser } from "../hooks/Api";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/userSlice";
 
 interface LoginProps {
   onLogin: (user: User) => void;
@@ -12,6 +14,7 @@ const Login = ({ onLogin }: LoginProps) => {
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,7 +23,8 @@ const Login = ({ onLogin }: LoginProps) => {
       const { token, user } = await loginUser(userName, password);
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-      onLogin(user);
+      dispatch(login({ user, token })); // Actualiza el usuario en Redux
+      onLogin(user); // Si necesitas actualizar el estado local en el padre
       navigate("/");
     } catch (error) {
       console.error("Error logging in:", error);
@@ -64,11 +68,10 @@ const Login = ({ onLogin }: LoginProps) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <Link to="/">
-            <button type="submit" className="btn btn-primary w-100">
-              Iniciar sesión
-            </button>
-          </Link>
+
+          <button type="submit" className="btn btn-primary w-100">
+            Iniciar sesión
+          </button>
         </form>
       </div>
     </div>

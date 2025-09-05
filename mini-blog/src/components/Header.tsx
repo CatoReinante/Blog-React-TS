@@ -21,20 +21,16 @@ const Header = ({ user, onLogout }: HeaderProps) => {
                 Inicio
               </Link>
             </li>
-            {user && (
-              <li className="nav-item">
-                <Link className="nav-link" to="/new-post">
-                  Nuevo Post
-                </Link>
-              </li>
-            )}
           </ul>
 
           <div className="d-flex">
             {user ? (
               <>
                 <span className="me-3 d-flex align-items-center">
-                  👤 <strong className="ms-1">{user.name}</strong>
+                  👤{" "}
+                  <strong className="ms-1">
+                    {user.username || user.name || user.email}
+                  </strong>
                 </span>
                 <button
                   className="btn btn-outline-danger btn-sm"

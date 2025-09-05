@@ -42,9 +42,11 @@ export async function createPostApi(content: string) {
   const token = localStorage.getItem("token");
   if (!token) throw new Error("No autorizado");
 
+  const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
+  if (!userId) throw new Error("No autorizado");
   const response = await API.post(
     "/posts",
-    { content },
+    { content, userId },
     {
       headers: { Authorization: `Bearer ${token}` },
     }

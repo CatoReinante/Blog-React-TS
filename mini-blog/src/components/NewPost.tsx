@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { type NewPostData, type User } from "../types";
+import { useSelector, useDispatch } from "react-redux";
+import { addPost } from "../redux/postSlice";
+import { createPostApi } from "../hooks/Api";
 
 interface NewPostProps {
   user: User | null;
@@ -9,29 +12,43 @@ const NewPost = ({ user }: NewPostProps) => {
   const [form, setForm] = useState<Omit<NewPostData, "author">>({
     content: "",
   });
+  const userLogged = useSelector(
+    (state: { user: { user: User | null } }) => state.user.user
+  );
+  const dispatch = useDispatch();
+
+  if (!userLogged) {
+    return null; // No renderiza el formulario si no hay usuario
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!user) {
+    if (!userLogged) {
       alert("Debes iniciar sesión para publicar un post.");
       return;
     }
 
     const newPost: NewPostData = {
       ...form,
-      author: user.name, // 👈 autor tomado del usuario logueado
+      author: userLogged.username || userLogged.name || userLogged.email,
     };
 
-    console.log("Nuevo post enviado:", newPost);
-
-    // Resetea formulario
-    setForm({ content: "" });
+    try {
+      // Envía el post al backend
+      const createdPost = await createPostApi(newPost.content);
+      // Agrega el post al store de Redux
+      dispatch(addPost(createdPost));
+      // Resetea formulario
+      setForm({ content: "" });
+    } catch (error) {
+      alert("Error al crear el post");
+    }
   };
 
   return (
