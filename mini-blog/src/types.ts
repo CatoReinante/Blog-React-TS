@@ -2,12 +2,14 @@ export interface Post {
   id: number;
   content: string;
   author: string;
-  createdAt: Date;
+  userId?: number;
+  createdAt: string | Date;
 }
 
 export interface User {
   id: number;
-  name: string;
+  name?: string;
+  username?: string;
   email: string;
 }
 

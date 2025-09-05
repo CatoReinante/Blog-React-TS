@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { type User } from "../types";
 import { Link, useNavigate } from "react-router";
-import { loginApi } from "../hooks/Api";
+import { loginUser } from "../hooks/Api";
 
 interface LoginProps {
   onLogin: (user: User) => void;
@@ -17,7 +17,7 @@ const Login = ({ onLogin }: LoginProps) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { token, user } = await loginApi(userName, password);
+      const { token, user } = await loginUser(userName, password);
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       onLogin(user);
