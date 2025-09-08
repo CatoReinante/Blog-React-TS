@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import { useDispatch } from "react-redux";
 import { logout } from "./redux/userSlice";
 import { persistor } from "./redux/storeConfig";
+import { Bounce, ToastContainer } from "react-toastify";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -31,6 +32,20 @@ function App() {
       </main>
 
       <Footer />
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
     </div>
   );
 }

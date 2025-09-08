@@ -31,7 +31,7 @@ const Home = ({ user }: HomeProps) => {
   }, [dispatch]);
 
   return (
-    <div className="container my-5" style={{ maxWidth: "900px" }}>
+    <div className="container my-5">
       <h1 className="mb-4 text-center">Mini Blog</h1>
 
       {user ? (
@@ -52,15 +52,27 @@ const Home = ({ user }: HomeProps) => {
       {loading && <p className="text-center">Cargando posts...</p>}
       {error && <p className="text-center text-danger">{error}</p>}
 
-      <div className="d-flex flex-column gap-3 mt-4">
+      <div className="row gap-3 justify-content-center">
         {posts.map((post) => (
-          <div key={post.id} className="card shadow">
+          <div
+            key={post.id}
+            className="card shadow col-3 p-3"
+            style={{
+              minHeight: "150px",
+              width: "300px",
+            }}
+          >
             <div className="card-body">
               <div className="d-flex justify-content-between mb-2">
-                <p className="mb-0"></p>
-                <span>
-                  {typeof post.author === "string" ? post.author : ""}
-                </span>
+                <p className="mb-4">
+                  {typeof post.author === "string"
+                    ? post.author
+                    : post.author?.username ||
+                      post.author?.name ||
+                      post.author?.email ||
+                      ""}
+                </p>
+
                 <small className="text-muted">
                   {new Date(post.createdAt).toLocaleDateString("es-ES", {
                     day: "2-digit",
@@ -69,7 +81,7 @@ const Home = ({ user }: HomeProps) => {
                   })}
                 </small>
               </div>
-              <p className="card-text">{post.content}</p>
+              <p className="card-text text-center">{post.content}</p>
             </div>
           </div>
         ))}

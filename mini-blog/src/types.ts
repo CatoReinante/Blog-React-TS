@@ -1,7 +1,7 @@
 export interface Post {
   id: number;
   content: string;
-  author: string;
+  author: string | { username?: string; name?: string; email?: string };
   userId?: number;
   createdAt: string | Date;
 }

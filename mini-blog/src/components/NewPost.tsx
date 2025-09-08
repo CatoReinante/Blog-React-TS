@@ -3,6 +3,7 @@ import { type NewPostData, type User } from "../types";
 import { useSelector, useDispatch } from "react-redux";
 import { addPost } from "../redux/postSlice";
 import { createPostApi } from "../hooks/Api";
+import { toast } from "react-toastify";
 
 interface NewPostProps {
   user: User | null;
@@ -46,8 +47,9 @@ const NewPost = ({ user }: NewPostProps) => {
       dispatch(addPost(createdPost));
       // Resetea formulario
       setForm({ content: "" });
+      toast.success("Post creado con éxito.");
     } catch (error) {
-      alert("Error al crear el post");
+      toast.error("Error al crear el post. Inténtalo de nuevo.");
     }
   };
 

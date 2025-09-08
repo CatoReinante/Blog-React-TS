@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { loginUser } from "../hooks/Api";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/userSlice";
+import { toast } from "react-toastify/unstyled";
 
 interface LoginProps {
   onLogin: (user: User) => void;
@@ -25,6 +26,7 @@ const Login = ({ onLogin }: LoginProps) => {
       localStorage.setItem("user", JSON.stringify(user));
       dispatch(login({ user, token })); // Actualiza el usuario en Redux
       onLogin(user); // Si necesitas actualizar el estado local en el padre
+
       navigate("/");
     } catch (error) {
       console.error("Error logging in:", error);
